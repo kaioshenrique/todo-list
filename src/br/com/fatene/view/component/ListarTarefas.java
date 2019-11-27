@@ -98,6 +98,7 @@ public class ListarTarefas extends JFrame {
 
         btnAdicionar.addActionListener(new InsertListener());
         btnEditar.addActionListener(new AtualizarListener());
+        btnRemover.addActionListener(new RemoverListener());
     }
 
     class InsertListener implements ActionListener {
@@ -119,6 +120,22 @@ public class ListarTarefas extends JFrame {
                 int idTarefa = (int) tabela.getValueAt(linhaSelecionada, 0);
                 AtualizarTarefa et = new AtualizarTarefa(model, idTarefa, linhaSelecionada);
                 et.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "É necesário selecionar uma tarefa.");
+            }
+        }
+    }
+
+    class RemoverListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int linhaSelecionada = -1;
+            linhaSelecionada = tabela.getSelectedRow();
+            if (linhaSelecionada >= 0) {
+                int idTarefa = (int) tabela.getValueAt(linhaSelecionada, 0);
+                controller.removeTask(idTarefa);
+                model.removeRow(linhaSelecionada);
             } else {
                 JOptionPane.showMessageDialog(null, "É necesário selecionar uma tarefa.");
             }
