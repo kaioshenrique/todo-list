@@ -16,6 +16,10 @@ public class TarefaController {
         return repo.getTarefas();
     }
 
+    public Tarefa getTaskById(int id) {
+        return repo.getTarefasById(id);
+    }
+
     public void insertTask(Tarefa tarefa) {
         repo.insert(tarefa);
     }

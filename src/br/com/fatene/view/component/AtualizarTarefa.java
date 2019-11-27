@@ -10,19 +10,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * @author Kaio Henrique on 11/27/2019
  */
-class InserirTarefa extends JFrame {
+public class AtualizarTarefa extends JFrame {
 
     private static final String DATA_FORMAT = "dd/MM/yyyy";
 
     private DefaultTableModel model;
     private JPanel pBackground;
-    private JButton btnSalvar, btnLimpar;
+    private JButton btnAtualizar, btnLimpar;
     private JLabel lTitulo;
     private JLabel lDescricao;
     private JLabel lDtInicio;
@@ -32,18 +33,33 @@ class InserirTarefa extends JFrame {
     private JXDatePicker dtInicio, dtFim;
     private JTextArea descricao;
     private JCheckBox status;
+    private Tarefa tarefa;
+
+    private int linhaSelecionada;
 
     private TarefaController controller = new TarefaController();
 
-    InserirTarefa(DefaultTableModel m) {
-        super("Adicionar Tarefa");
+    AtualizarTarefa(DefaultTableModel m, int idTarefa, int linha) {
+        super("Atualizar Tarefa");
         montarJanela();
         model = m;
+        tarefa = controller.getTaskById(idTarefa);
+
+        titulo.setText(tarefa.getTitulo());
+        descricao.setText(tarefa.getDescricao());
+        dtInicio.setDate(convertStringToDate(tarefa.getDtInicio()));
+        dtFim.setDate(convertStringToDate(tarefa.getDtFim()));
+        if (tarefa.isStatus()) {
+            status.setSelected(true);
+        } else {
+            status.setSelected(false);
+        }
+        linhaSelecionada = linha;
     }
 
     private void montarJanela() {
-        btnSalvar = new JButton("Salvar");
-        btnSalvar.setBounds(60, 300, 80, 40);
+        btnAtualizar = new JButton("Atualizar");
+        btnAtualizar.setBounds(60, 300, 80, 40);
 
         btnLimpar = new JButton("Limpar");
         btnLimpar.setBounds(150, 300, 80, 40);
@@ -93,7 +109,7 @@ class InserirTarefa extends JFrame {
         pBackground.add(dtFim);
         pBackground.add(lStatus);
         pBackground.add(status);
-        pBackground.add(btnSalvar);
+        pBackground.add(btnAtualizar);
         pBackground.add(btnLimpar);
 
         getContentPane().add(pBackground);
@@ -102,17 +118,19 @@ class InserirTarefa extends JFrame {
         setResizable(false);
         setVisible(true);
 
-        btnSalvar.addActionListener(new BtnSalvarTarefa());
+        btnAtualizar.addActionListener(new BtnAtualizarListener());
         btnLimpar.addActionListener(new BtnLimparCampos());
     }
 
-    private class BtnSalvarTarefa implements ActionListener {
+    class BtnAtualizarListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             if (titulo.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os campos com (*).");
             } else {
                 Tarefa t = new Tarefa();
+                t.setId(tarefa.getId());
                 t.setTitulo(titulo.getText());
                 t.setDescricao(descricao.getText());
                 t.setDtInicio(convertDateToString(dtInicio.getDate()));
@@ -123,9 +141,16 @@ class InserirTarefa extends JFrame {
                     t.setStatus(false);
                 }
 
-                controller.insertTask(t);
-                ListarTarefas.search(model);
-
+                controller.updateTask(t);
+                model.removeRow(linhaSelecionada);
+                model.addRow(new Object[]{
+                        t.getId(),
+                        t.getTitulo(),
+                        t.getDescricao(),
+                        t.dataInicio(),
+                        t.dataFim(),
+                        t.status()
+                });
                 setVisible(false);
             }
         }
@@ -141,6 +166,22 @@ class InserirTarefa extends JFrame {
             dtFim.setDate(null);
             status.setSelected(false);
         }
+    }
+
+    private Date convertStringToDate(String date) {
+        Date dataConvertida = new Date();
+        if (date != null) {
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat(DATA_FORMAT);
+                dataConvertida = formatter.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new Date();
+        }
+
+        return dataConvertida;
     }
 
     private String convertDateToString(Date date) {

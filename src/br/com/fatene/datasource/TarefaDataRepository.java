@@ -21,6 +21,7 @@ public class TarefaDataRepository implements TarefaRepository {
     private static final String UPDATE = "UPDATE TB_TASKS SET titulo=?, descricao=?, dt_inicio=?, dt_fim=?, status=? WHERE id=?";
     private static final String DELETE = "DELETE FROM TB_TASKS WHERE id =?";
     private static final String LIST = "SELECT * FROM TB_TASKS";
+    private static final String TASKBYID = "SELECT * FROM TB_TASKS WHERE id=?";
 
     private static final String EMPTY_TEXT = "Nenhum dado informado.";
 
@@ -59,12 +60,12 @@ public class TarefaDataRepository implements TarefaRepository {
             try {
                 executeSQL(UPDATE);
 
-                stmt.setInt(1, tarefa.getId());
-                stmt.setString(2, tarefa.getTitulo());
-                stmt.setString(3, tarefa.getDescricao());
-                stmt.setString(4, tarefa.getDtInicio());
-                stmt.setString(5, tarefa.getDtFim());
-                stmt.setBoolean(6, tarefa.isStatus());
+                stmt.setString(1, tarefa.getTitulo());
+                stmt.setString(2, tarefa.getDescricao());
+                stmt.setString(3, tarefa.getDtInicio());
+                stmt.setString(4, tarefa.getDtFim());
+                stmt.setBoolean(5, tarefa.isStatus());
+                stmt.setInt(6, tarefa.getId());
 
                 stmt.execute();
                 JOptionPane.showMessageDialog(null, "Tarefa atualizada com sucesso.");
@@ -118,6 +119,30 @@ public class TarefaDataRepository implements TarefaRepository {
         }
 
         return tarefas;
+    }
+
+    @Override
+    public Tarefa getTarefasById(int idTarefa) {
+        ResultSet rs;
+        Tarefa task = new Tarefa();
+
+        try {
+            executeSQL(TASKBYID);
+            stmt.setInt(1, idTarefa);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                task.setId(rs.getInt("id"));
+                task.setTitulo(rs.getString("titulo"));
+                task.setDescricao(rs.getString("descricao"));
+                task.setDtInicio(rs.getString("dt_inicio"));
+                task.setDtFim(rs.getString("dt_fim"));
+                task.setStatus(rs.getBoolean("status"));
+            }
+            ConnectionDB.closeConnection(conn, stmt);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível encontrar sua tarefa.");
+        }
+        return task;
     }
 
     private void executeSQL(String sql) throws SQLException, ClassNotFoundException {

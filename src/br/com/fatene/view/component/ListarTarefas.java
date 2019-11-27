@@ -97,6 +97,7 @@ public class ListarTarefas extends JFrame {
         setVisible(true);
 
         btnAdicionar.addActionListener(new InsertListener());
+        btnEditar.addActionListener(new AtualizarListener());
     }
 
     class InsertListener implements ActionListener {
@@ -105,6 +106,22 @@ public class ListarTarefas extends JFrame {
         public void actionPerformed(ActionEvent e) {
             InserirTarefa t = new InserirTarefa(model);
             t.setVisible(true);
+        }
+    }
+
+    class AtualizarListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int linhaSelecionada = -1;
+            linhaSelecionada = tabela.getSelectedRow();
+            if (linhaSelecionada >= 0) {
+                int idTarefa = (int) tabela.getValueAt(linhaSelecionada, 0);
+                AtualizarTarefa et = new AtualizarTarefa(model, idTarefa, linhaSelecionada);
+                et.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "É necesário selecionar uma tarefa.");
+            }
         }
     }
 

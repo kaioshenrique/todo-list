@@ -13,5 +13,6 @@ public interface TarefaRepository {
     void update(Tarefa tarefa);
     void remove(int idTarefa);
     List<Tarefa> getTarefas();
+    Tarefa getTarefasById(int idTarefa);
 
 }
