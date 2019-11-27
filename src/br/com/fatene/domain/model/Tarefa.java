@@ -61,4 +61,28 @@ public class Tarefa {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public String status() {
+        if (status) {
+            return "Concluída";
+        } else {
+            return "Não concluída";
+        }
+    }
+
+    public String dataInicio() {
+        if (dtInicio.isEmpty()) {
+            return "-";
+        } else {
+            return getDtInicio();
+        }
+    }
+
+    public String dataFim() {
+        if (dtFim.isEmpty()) {
+            return "-";
+        } else {
+            return getDtFim();
+        }
+    }
 }

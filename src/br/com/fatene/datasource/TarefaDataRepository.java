@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class TarefaDataRepository implements TarefaRepository {
 
-    private static final String INSERT = "INSERT INTO TB_TASKS (TITULO, DESCRICAO, DT_INICO, DT_FIM, STATUS) VALUES (?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE TB_TASKS SET TITULO=?, DESCRICAO=?, DT_INICO=?, DT_FIM=?, STATUS=? WHERE ID=?";
-    private static final String DELETE = "DELETE FROM TB_TASKS WHERE ID =?";
+    private static final String INSERT = "INSERT INTO TB_TASKS (titulo, descricao, dt_inicio, dt_fim, status) VALUES (?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE TB_TASKS SET titulo=?, descricao=?, dt_inicio=?, dt_fim=?, status=? WHERE id=?";
+    private static final String DELETE = "DELETE FROM TB_TASKS WHERE id =?";
     private static final String LIST = "SELECT * FROM TB_TASKS";
 
     private static final String EMPTY_TEXT = "Nenhum dado informado.";
@@ -59,11 +59,12 @@ public class TarefaDataRepository implements TarefaRepository {
             try {
                 executeSQL(UPDATE);
 
-                stmt.setString(1, tarefa.getTitulo());
-                stmt.setString(2, tarefa.getDescricao());
-                stmt.setString(3, tarefa.getDtInicio());
-                stmt.setString(4, tarefa.getDtFim());
-                stmt.setBoolean(5, tarefa.isStatus());
+                stmt.setInt(1, tarefa.getId());
+                stmt.setString(2, tarefa.getTitulo());
+                stmt.setString(3, tarefa.getDescricao());
+                stmt.setString(4, tarefa.getDtInicio());
+                stmt.setString(5, tarefa.getDtFim());
+                stmt.setBoolean(6, tarefa.isStatus());
 
                 stmt.execute();
                 JOptionPane.showMessageDialog(null, "Tarefa atualizada com sucesso.");
