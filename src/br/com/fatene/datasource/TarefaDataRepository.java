@@ -27,7 +27,8 @@ public class TarefaDataRepository implements TarefaRepository {
     private Connection conn;
     private PreparedStatement stmt = null;
 
-    public TarefaDataRepository(){}
+    public TarefaDataRepository() {
+    }
 
     @Override
     public void insert(Tarefa tarefa) {
@@ -37,8 +38,8 @@ public class TarefaDataRepository implements TarefaRepository {
 
                 stmt.setString(1, tarefa.getTitulo());
                 stmt.setString(2, tarefa.getDescricao());
-                stmt.setDate(3, tarefa.getDtInicio());
-                stmt.setDate(4, tarefa.getDtFim());
+                stmt.setString(3, tarefa.getDtInicio());
+                stmt.setString(4, tarefa.getDtFim());
                 stmt.setBoolean(5, tarefa.isStatus());
 
                 stmt.execute();
@@ -60,8 +61,8 @@ public class TarefaDataRepository implements TarefaRepository {
 
                 stmt.setString(1, tarefa.getTitulo());
                 stmt.setString(2, tarefa.getDescricao());
-                stmt.setDate(3, tarefa.getDtInicio());
-                stmt.setDate(4, tarefa.getDtFim());
+                stmt.setString(3, tarefa.getDtInicio());
+                stmt.setString(4, tarefa.getDtFim());
                 stmt.setBoolean(5, tarefa.isStatus());
 
                 stmt.execute();
@@ -104,8 +105,8 @@ public class TarefaDataRepository implements TarefaRepository {
                 task.setId(rs.getInt("id"));
                 task.setTitulo(rs.getString("titulo"));
                 task.setDescricao(rs.getString("descricao"));
-                task.setDtInicio(rs.getDate("dt_inicio"));
-                task.setDtFim(rs.getDate("dt_fim"));
+                task.setDtInicio(rs.getString("dt_inicio"));
+                task.setDtFim(rs.getString("dt_fim"));
                 task.setStatus(rs.getBoolean("status"));
 
                 tarefas.add(task);

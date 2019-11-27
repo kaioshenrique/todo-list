@@ -1,7 +1,5 @@
 package br.com.fatene.domain.model;
 
-import java.sql.Date;
-
 /**
  * @author Kaio Henrique on 11/25/2019
  */
@@ -9,11 +7,12 @@ public class Tarefa {
     private int id;
     private String titulo;
     private String descricao;
-    private Date dtInicio;
-    private Date dtFim;
+    private String dtInicio;
+    private String dtFim;
     private boolean status;
 
-    public Tarefa() { }
+    public Tarefa() {
+    }
 
     public int getId() {
         return id;
@@ -39,19 +38,19 @@ public class Tarefa {
         this.descricao = descricao;
     }
 
-    public Date getDtInicio() {
+    public String getDtInicio() {
         return dtInicio;
     }
 
-    public void setDtInicio(Date dtInicio) {
+    public void setDtInicio(String dtInicio) {
         this.dtInicio = dtInicio;
     }
 
-    public Date getDtFim() {
+    public String getDtFim() {
         return dtFim;
     }
 
-    public void setDtFim(Date dtFim) {
+    public void setDtFim(String dtFim) {
         this.dtFim = dtFim;
     }
 
